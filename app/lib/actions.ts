@@ -5,6 +5,10 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
 
+//  Auth-import
+import { signIn } from '@/auth';
+import { AuthError } from 'next-auth';
+
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const FormSchema = z.object({
@@ -33,6 +37,7 @@ export type State = {
   message?: string | null;
 };
 
+//  createInvoice
 export async function createInvoice(
   prevState: State,
   formData: FormData
@@ -69,6 +74,7 @@ export async function createInvoice(
   return { message: null, errors: {} };
 }
 
+// deleteInvoice
 export async function deleteInvoice(id: string): Promise<State> {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
@@ -82,4 +88,24 @@ export async function deleteInvoice(id: string): Promise<State> {
   revalidatePath('/dashboard/invoices');
 
   return { message: null };
+}
+
+//  authenticate login
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+): Promise<string | undefined> {
+  try {
+    await signIn('credentials', formData);
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case 'CredentialsSignin':
+          return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
 }
