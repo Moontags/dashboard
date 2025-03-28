@@ -27,7 +27,7 @@ This project was built using the [Next.js](https://nextjs.org/) App Router archi
 
 ---
 
-##  Tutorial Topics & Features
+## Tutorial Topics & Features
 
 ### Styling
 Different ways to style your app using Tailwind and global CSS modules.
@@ -58,6 +58,15 @@ Add authentication using NextAuth.js, credentials provider, bcrypt, and middlewa
 
 ### Metadata
 Add dynamic metadata for SEO and social sharing using the `metadata` object in page and layout files.
+
+---
+
+## Login Credentials
+
+To test the dashboard, use the following credentials:
+
+- **Email:** `user@nextmail.com`  
+- **Password:** `123456`
 
 ---
 
