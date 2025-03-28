@@ -65,16 +65,13 @@ Add dynamic metadata for SEO and social sharing using the `metadata` object in p
 
 To test the dashboard, use the following credentials:
 
+- **git clone:**
+- **pnpm run dev**
 - **Email:** `user@nextmail.com`  
 - **Password:** `123456`
 
 ---
 
-## Live Demo
-
-👉 [Visit the deployed dashboard on Vercel](https://nextjs-dashboard-six-phi-33.vercel.app/)
-
----
 
 ## Summary
 
