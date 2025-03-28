@@ -65,7 +65,7 @@ Add dynamic metadata for SEO and social sharing using the `metadata` object in p
 
 To test the dashboard, use the following credentials:
 
-- **git clone: `git clone git@github.com:Moontags/dashboard.git`**
+- **git clone: `git@github.com:Moontags/dashboard.git`**
 - **pnpm run dev**
 - **Email:** `user@nextmail.com`  
 - **Password:** `123456`
