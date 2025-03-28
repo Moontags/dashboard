@@ -4,8 +4,6 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import postgres from 'postgres';
-
-//  Auth-import
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 
@@ -37,7 +35,7 @@ export type State = {
   message?: string | null;
 };
 
-//  createInvoice
+// Create invoice
 export async function createInvoice(
   prevState: State,
   formData: FormData
@@ -64,6 +62,7 @@ export async function createInvoice(
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
+    revalidatePath('/dashboard/invoices');
   } catch (error) {
     console.error('Error creating invoice:', error);
     return {
@@ -74,23 +73,55 @@ export async function createInvoice(
   return { message: null, errors: {} };
 }
 
-// deleteInvoice
-export async function deleteInvoice(id: string): Promise<State> {
+// Delete invoice
+export async function deleteInvoice(id: string): Promise<void> {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
+    revalidatePath('/dashboard/invoices');
   } catch (error) {
     console.error('Error deleting invoice:', error);
+  }
+}
+
+// Update invoice
+export async function updateInvoice(
+  id: string,
+  formData: FormData
+): Promise<State> {
+  const validatedFields = UpdateInvoice.safeParse({
+    customerId: formData.get('customerId'),
+    amount: formData.get('amount'),
+    status: formData.get('status'),
+  });
+
+  if (!validatedFields.success) {
     return {
-      message: 'Database error: Failed to delete invoice.',
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Missing or invalid fields. Failed to update invoice.',
     };
   }
 
-  revalidatePath('/dashboard/invoices');
+  const { customerId, amount, status } = validatedFields.data;
+  const amountInCents = amount * 100;
+
+  try {
+    await sql`
+      UPDATE invoices
+      SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+      WHERE id = ${id}
+    `;
+    revalidatePath('/dashboard/invoices');
+  } catch (error) {
+    console.error('Error updating invoice:', error);
+    return {
+      message: 'Database error: Failed to update invoice.',
+    };
+  }
 
   return { message: null };
 }
 
-//  authenticate login
+// Authenticate user
 export async function authenticate(
   prevState: string | undefined,
   formData: FormData,
