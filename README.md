@@ -1,4 +1,4 @@
-# 🚀 Next.js Dashboard Project (Tutorial Summary)
+# Next.js Dashboard Project (Tutorial Summary)
 
 This project was built using the [Next.js](https://nextjs.org/) App Router architecture, featuring a dynamic dashboard with authentication, invoice management, and PostgreSQL integration.
 
