@@ -18,6 +18,9 @@ export default function EditInvoiceForm({
   invoice: InvoiceForm;
   customers: CustomerField[];
 }) {
+  if (!invoice) {
+    return <p className="text-red-500">Invoice not found.</p>;
+  }
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
 
   return (
